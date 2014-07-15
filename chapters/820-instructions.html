@@ -48,9 +48,11 @@
 		
 	
 		
+	
+		
 			<style>
 				 body {
-					counter-reset: h1 20;
+					counter-reset: h1 21;
 				}
 			</style>
 				
@@ -142,6 +144,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/250-resolving.html">Resolving Dependencies</a>
+	  	
+  	
+		
 			<li><a href="/chapters/300-launching.html">Launching</a>
 	  	
   	
@@ -228,7 +234,8 @@
 <dt><a href="/instructions/donotcopy.html">-donotcopy</a></dt><dd>Set the default filters for file resources that should not be copied.</dd>
 <dt><a href="/instructions/dsannotations.html">-dsannotations SELECTORS</a></dt><dd>Selects the packages that need processor for standard OSGi DS annotations.</dd>
 <dt><a href="/instructions/eeprofile.html">-eeprofile 'auto' | PROFILE +</a></dt><dd>Provides control over what Java 8 profile to use.</dd>
-<dt><a href="/instructions/export_contents.html">-exportcontents PACKAGE-SPEC, ( ',' PACKAGE-SPEC )*</a></dt><dd>Exports the given packages but does not try to include them from the class path. The packages should be loaded with alternative means.</dd>
+<dt><a href="/instructions/export.html">-export FILE ( ';' PARAMETER )* ( ',' FILE ( ';' PARAMETER )* )*</a></dt><dd>Turns a bndrun file into its deployable format</dd>
+<dt><a href="/instructions/exportcontents.html">-exportcontents PACKAGE-SPEC, ( ',' PACKAGE-SPEC )*</a></dt><dd>Exports the given packages but does not try to include them from the class path. The packages should be loaded with alternative means.</dd>
 <dt><a href="/instructions/extension.html">-extension</a></dt><dd>A plugin that is loaded to its url, downloaded and then provides a header used instantiate the plugin.</dd>
 <dt><a href="/instructions/failok.html">-failok ('true' | 'false')?</a></dt><dd>Will ignore any error during building and assume all went ok.</dd>
 <dt><a href="/instructions/fixupmessages.html">-fixupmessages MATCHER ( ';' directive )*</a></dt><dd>Fixup errors and warnings.</dd>
