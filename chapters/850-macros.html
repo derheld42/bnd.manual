@@ -52,9 +52,11 @@
 		
 	
 		
+	
+		
 			<style>
 				 body {
-					counter-reset: h1 22;
+					counter-reset: h1 23;
 				}
 			</style>
 				
@@ -100,11 +102,15 @@
 			<ul class="side-nav">
 	
 		
+			<li><a href="/chapters/100-release.html">Release</a>
+	  	
+  	
+		
 			<li><a href="/chapters/110-introduction.html">Introduction</a>
 	  	
   	
 		
-			<li><a href="/chapters/120-install.html">Where to find it</a>
+			<li><a href="/chapters/120-install.html">How to install bnd</a>
 	  	
   	
 		
@@ -293,6 +299,8 @@ Bundle-Description= This bundle has version ${version}
 <dt><a href="/macros/join.html">join ( ';' LIST )+</a></dt><dd>Join a number of list/values into a single list</dd>
 <dt><a href="/macros/js.html">js (';' JAVASCRIPT )*</a></dt><dd>Execute Javascript, return the value of the last expression</dd>
 <dt><a href="/macros/last.html">last (';' LIST )*</a></dt><dd>Last element of a list</dd>
+<dt><a href="/macros/lastfind.html">find ';' VALUE ';' SEARCHED</a></dt><dd>The starting position ofof SEARCHED (not a regex) in VALUE</dd>
+<dt><a href="/macros/lastindexof.html">lastindexof ';' STRING (';' LIST )*</a></dt><dd>The last index of the given string in the list, or -1 if not found</dd>
 <dt><a href="/macros/length.html">length STRING</a></dt><dd>The length of the given string</dd>
 <dt><a href="/macros/literal.html">literal ';' STRING</a></dt><dd>A literal value for the macro, i.e. it surrounds the value with the macro prefix and suffix.</dd>
 <dt><a href="/macros/long2date.html">long2date</a></dt><dd>Turn a long time into a date</dd>
@@ -322,6 +330,8 @@ Bundle-Description= This bundle has version ${version}
 <dt><a href="/macros/pathseparator.html">pathseparator</a></dt><dd>The platform's path separator</dd>
 <dt><a href="/macros/permissions.html">permissions (';' ( 'packages' | 'admin' | 'permissions' ) )+</a></dt><dd>A file in the format for the OSGi permissions resource.</dd>
 <dt><a href="/macros/project.html"></a></dt><dd></dd>
+<dt><a href="/macros/propertiesdir.html"></a></dt><dd></dd>
+<dt><a href="/macros/propertiesname.html"></a></dt><dd></dd>
 <dt><a href="/macros/rand.html">rand (';' MIN ' (;' MAX )?)?</a></dt><dd>A random number between 0 and 100, or between the given range (inclusive).</dd>
 <dt><a href="/macros/random.html">random</a></dt><dd>Generate a random string, which is guaranteed to be a valid Java identifier</dd>
 <dt><a href="/macros/range.html">range ';' MASK ( ';' VERSION )</a></dt><dd>Create a semantic version range out of a version using a mask to control the bump</dd>
@@ -343,6 +353,8 @@ Bundle-Description= This bundle has version ${version}
 <dt><a href="/macros/substring.html">substring ';' STRING ';' START ( ';' END )?</a></dt><dd>Return a substring of a given string, negative indexes allowed</dd>
 <dt><a href="/macros/sum.html">sum (';' LIST )*</a></dt><dd>The sum of a list</dd>
 <dt><a href="/macros/system.html">system ';' STRING ( ';' STRING )?</a></dt><dd>Execute a system command</dd>
+<dt><a href="/macros/system_allow_fail.html">system_allow_fail ';' STRING ( ';' STRING )?</a></dt><dd>Execute a system command but ignore any failures</dd>
+<dt><a href="/macros/toclaspath.html">toclasspath ';' LIST ( ';' BOOLEAN )?</a></dt><dd>Convert a list of class names to a list of paths.</dd>
 <dt><a href="/macros/toclassname.html">toclassname ';' FILES</a></dt><dd>Translate a list of relative file paths to class names. The files can either end with .class or .java</dd>
 <dt><a href="/macros/tolower.html">tolower STRING</a></dt><dd>Turn a string into an lower case string</dd>
 <dt><a href="/macros/toupper.html">toupper STRING</a></dt><dd>Turn a string into an uppercase string</dd>

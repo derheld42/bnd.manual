@@ -1,0 +1,17 @@
+<pre><code>static String	_toclasspathHelp	= "${toclasspath;&lt;list&gt;[;boolean]}, convert a list of class names to paths";
+
+public String _toclasspath(String args[]) {
+	verifyCommand(args, _toclasspathHelp, null, 2, 3);
+	boolean cl = true;
+	if (args.length &gt; 2)
+		cl = Boolean.valueOf(args[2]);
+
+	Collection&lt;String&gt; names = Processor.split(args[1]);
+	Collection&lt;String&gt; paths = new ArrayList&lt;String&gt;(names.size());
+	for (String name : names) {
+		String path = name.replace('.', '/') + (cl ? ".class" : "");
+		paths.add(path);
+	}
+	return Processor.join(paths, ",");
+}
+</code></pre>
