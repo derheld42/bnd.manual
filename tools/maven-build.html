@@ -216,7 +216,7 @@
 		<li span=9>
 			<div class=notes-margin>
 				<h1> Maven Build Plugin</h1>
-				<p>One set of developers comes from the Maven world and is generally happy with the “Maven Way”; they do not want it to change significantly. We feel that these users are already well served by the Felix Bundle Plugin, m2eclipse and even other IDEs such as NetBeans.  We call the above a “Maven first” approach. bndlib supports this approach with the Apache Felix Maven Bundle plugin. This plugin is maintained by the Apache Felix project the plugin is [well documented there][1]. This document shamelessly copies some of this information.</p>
+				<p>One set of developers comes from the Maven world and is generally happy with the “Maven Way”; they do not want it to change significantly. We feel that these users are already well served by the Felix Bundle Plugin, m2eclipse and even other IDEs such as NetBeans.  We call the above a “Maven first” approach. bndlib supports this approach with the Apache Felix Maven Bundle plugin. This plugin is maintained by the Apache Felix project the plugin is <a href="http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html">well documented there</a>. This document shamelessly copies some of this information.</p>
 
 <p>The Apache Felix Maven Bundle plugin uses bndlib only to create a manifest; it does not support the bndlib’s workspace and project model. This means that not all instructions and macros are relevant. </p>
 
@@ -312,251 +312,262 @@ ${local-packages}
 
 <h3 id="export-package">Export Package</h3>
 
-<export-package> is now assumed to be the set of packages in your local Java sources, excluding the default package '.' and any packages containing 'impl' or 'internal'. (before version 2 of the bundleplugin it was based on the symbolic name)
+<p>Export-Package is assumed to be the set of packages in your local Java sources, excluding the default package ‘.’ and any packages containing ‘impl’ or ‘internal’. (before version 2 of the bundleplugin it was based on the symbolic name)</p>
 
-&gt; From a bndlib perspective, this is the wrong default. An exported package is an expensive thing to have and the philosophy of bndlib is to make these expensive choices explicit, this is the reason the bndlib default is to make nothing exported, especially because good bundles should have no or very few exports.
+<blockquote>
+  <p>From a bndlib perspective, this is the wrong default. An exported package is an expensive thing to have and the philosophy of bndlib is to make these expensive choices explicit, this is the reason the bndlib default is to make nothing exported, especially because good bundles should have no or very few exports.</p>
+</blockquote>
 
+<h2 id="detailed-how-to">Detailed “How To”</h2>
 
-### Detailed "How To"
+<p>To use the maven-bundle-plugin, you first need to add the plugin and some appropriate plugin configuration to your bundle project’s POM. Below is an example of a simple OSGi bundle POM for Maven2:</p>
 
-To use the maven-bundle-plugin, you first need to add the plugin and some appropriate plugin configuration to your bundle project's POM. Below is an example of a simple OSGi bundle POM for Maven2:
+<pre><code>&lt;project&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;my-osgi-bundles&lt;/groupId&gt;
+  &lt;artifactId&gt;examplebundle&lt;/artifactId&gt;
+  &lt;packaging&gt;bundle&lt;/packaging&gt;    &lt;!-- (1) --&gt;
+  &lt;version&gt;1.0&lt;/version&gt;
+  &lt;name&gt;Example Bundle&lt;/name&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+      &lt;artifactId&gt;org.osgi.core&lt;/artifactId&gt;
+      &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;    &lt;!-- (2) START --&gt;
+        &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-bundle-plugin&lt;/artifactId&gt;
+        &lt;extensions&gt;true&lt;/extensions&gt;
+        &lt;configuration&gt;
+          &lt;instructions&gt;
+            &lt;Export-Package&gt;com.my.company.api&lt;/Export-Package&gt;
+            &lt;Private-Package&gt;com.my.company.*&lt;/Private-Package&gt;
+            &lt;Bundle-Activator&gt;com.my.company.Activator&lt;/Bundle-Activator&gt;
+          &lt;/instructions&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;    &lt;!-- (2) END --&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;
+</code></pre>
 
-	<project>
-	  <modelversion>4.0.0</modelversion>
-	  <groupid>my-osgi-bundles</groupid>
-	  <artifactid>examplebundle</artifactid>
-	  <packaging>bundle</packaging>    <!-- (1) -->
-	  <version>1.0</version>
-	  <name>Example Bundle</name>
-	  <dependencies>
-	    <dependency>
-	      <groupid>org.apache.felix</groupid>
-	      <artifactid>org.osgi.core</artifactid>
-	      <version>1.0.0</version>
-	    </dependency>
-	  </dependencies>
-	  <build>
-	    <plugins>
-	      <plugin>    <!-- (2) START -->
-	        <groupid>org.apache.felix</groupid>
-	        <artifactid>maven-bundle-plugin</artifactid>
-	        <extensions>true</extensions>
-	        <configuration>
-	          <instructions>
-	            <export-package>com.my.company.api</export-package>
-	            <private-package>com.my.company.*</private-package>
-	            <bundle-activator>com.my.company.Activator</bundle-activator>
-	          </instructions>
-	        </configuration>
-	      </plugin>    <!-- (2) END -->
-	    </plugins>
-	  </build>
-	</project>
+<p>There are two main things to note: (1) the <packaging> specifier must be `bundle` and (2) the plugin and configuration must be specified (the configuration section is where you will issue instructions to the plugin).</packaging></p>
 
-There are two main things to note: (1) the <packaging> specifier must be `bundle` and (2) the plugin and configuration must be specified (the configuration section is where you will issue instructions to the plugin).
+<h2 id="real-world-example">Real-World Example</h2>
 
-## Real-World Example
+<p>Consider this more real-world example using Felix’ Log Service implementation. The Log Service project is comprised of a single package: org.apache.felix.log.impl. It has a dependency on the core OSGi interfaces as well as a dependency on the compendium OSGi interfaces for the specific log service interfaces. The following is its POM file:</p>
 
-Consider this more real-world example using Felix' Log Service implementation. The Log Service project is comprised of a single package: org.apache.felix.log.impl. It has a dependency on the core OSGi interfaces as well as a dependency on the compendium OSGi interfaces for the specific log service interfaces. The following is its POM file:
+<pre><code>&lt;project&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+  &lt;artifactId&gt;org.apache.felix.log&lt;/artifactId&gt;
+  &lt;packaging&gt;bundle&lt;/packaging&gt;
+  &lt;name&gt;Apache Felix Log Service&lt;/name&gt;
+  &lt;version&gt;0.8.0-SNAPSHOT&lt;/version&gt;
+  &lt;description&gt;
+    This bundle provides an implementation of the OSGi R4 Log service.
+  &lt;/description&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;${pom.groupId}&lt;/groupId&gt;
+      &lt;artifactId&gt;org.osgi.core&lt;/artifactId&gt;
+      &lt;version&gt;0.8.0-incubator&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;${pom.groupId}&lt;/groupId&gt;
+      &lt;artifactId&gt;org.osgi.compendium&lt;/artifactId&gt;
+      &lt;version&gt;0.9.0-incubator-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-bundle-plugin&lt;/artifactId&gt;
+        &lt;extensions&gt;true&lt;/extensions&gt;
+        &lt;configuration&gt;
+          &lt;instructions&gt;
+            &lt;Export-Package&gt;org.osgi.service.log&lt;/Export-Package&gt;
+            &lt;Private-Package&gt;org.apache.felix.log.impl&lt;/Private-Package&gt;
+            &lt;Bundle-SymbolicName&gt;${pom.artifactId}&lt;/Bundle-SymbolicName&gt;
+            &lt;Bundle-Activator&gt;${pom.artifactId}.impl.Activator&lt;/Bundle-Activator&gt;
+            &lt;Export-Service&gt;org.osgi.service.log.LogService,org.osgi.service.log.LogReaderService&lt;/Export-Service&gt;
+          &lt;/instructions&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;
+</code></pre>
 
-	<project>
-	  <modelversion>4.0.0</modelversion>
-	  <groupid>org.apache.felix</groupid>
-	  <artifactid>org.apache.felix.log</artifactid>
-	  <packaging>bundle</packaging>
-	  <name>Apache Felix Log Service</name>
-	  <version>0.8.0-SNAPSHOT</version>
-	  <description>
-	    This bundle provides an implementation of the OSGi R4 Log service.
-	  </description>
-	  <dependencies>
-	    <dependency>
-	      <groupid>${pom.groupId}</groupid>
-	      <artifactid>org.osgi.core</artifactid>
-	      <version>0.8.0-incubator</version>
-	    </dependency>
-	    <dependency>
-	      <groupid>${pom.groupId}</groupid>
-	      <artifactid>org.osgi.compendium</artifactid>
-	      <version>0.9.0-incubator-SNAPSHOT</version>
-	    </dependency>
-	  </dependencies>
-	  <build>
-	    <plugins>
-	      <plugin>
-	        <groupid>org.apache.felix</groupid>
-	        <artifactid>maven-bundle-plugin</artifactid>
-	        <extensions>true</extensions>
-	        <configuration>
-	          <instructions>
-	            <export-package>org.osgi.service.log</export-package>
-	            <private-package>org.apache.felix.log.impl</private-package>
-	            <bundle-symbolicname>${pom.artifactId}</bundle-symbolicname>
-	            <bundle-activator>${pom.artifactId}.impl.Activator</bundle-activator>
-	            <export-service>org.osgi.service.log.LogService,org.osgi.service.log.LogReaderService</export-service>
-	          </instructions>
-	        </configuration>
-	      </plugin>
-	    </plugins>
-	  </build>
-	</project>
+<p>This will create a manifest of:</p>
 
-This will create a manifest of:
+<pre><code>Manifest-Version: 1
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Activator: org.apache.felix.log.impl.Activator
+Import-Package: org.osgi.framework;version=1.3, org.osgi.service.log;v
+ ersion=1.3
+Include-Resource: src/main/resources
+Export-Package: org.osgi.service.log;uses:=org.osgi.framework;version=
+ 1.3
+Bundle-Version: 0.8.0.SNAPSHOT
+Bundle-Name: Apache Felix Log Service
+Bundle-Description: This bundle provides an implementation of the OSGi
+  R4 Log service.
+Private-Package: org.apache.felix.log.impl
+Bundle-ManifestVersion: 2
+Export-Service: org.osgi.service.log.LogService,org.osgi.service.log.L
+ ogReaderService
+Bundle-SymbolicName: org.apache.felix.log
+The resulting bundle JAR file has the following content (notice how the LICENSE and NOTICE files were automatically copied from the src/main/resources/ directory of the project):
+</code></pre>
 
-	Manifest-Version: 1
-	Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
-	Bundle-Activator: org.apache.felix.log.impl.Activator
-	Import-Package: org.osgi.framework;version=1.3, org.osgi.service.log;v
-	 ersion=1.3
-	Include-Resource: src/main/resources
-	Export-Package: org.osgi.service.log;uses:=org.osgi.framework;version=
-	 1.3
-	Bundle-Version: 0.8.0.SNAPSHOT
-	Bundle-Name: Apache Felix Log Service
-	Bundle-Description: This bundle provides an implementation of the OSGi
-	  R4 Log service.
-	Private-Package: org.apache.felix.log.impl
-	Bundle-ManifestVersion: 2
-	Export-Service: org.osgi.service.log.LogService,org.osgi.service.log.L
-	 ogReaderService
-	Bundle-SymbolicName: org.apache.felix.log
-	The resulting bundle JAR file has the following content (notice how the LICENSE and NOTICE files were automatically copied from the src/main/resources/ directory of the project):
-
-If you want to keep your project packaging type (for example "jar") but would like to add OSGi metadata
+<p>If you want to keep your project packaging type (for example “jar”) but would like to add OSGi metadata
 you can use the manifest goal to generate a bundle manifest. The maven-jar-plugin can then be used to
-add this manifest to the final artifact. For example:
+add this manifest to the final artifact. For example:</p>
 
-	<plugin>
-	  <artifactid>maven-jar-plugin</artifactid>
-	  <configuration>
-	    <archive>  
-	      <manifestfile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestfile>
-	    </archive> 
-	  </configuration>
-	</plugin>  
-	<plugin>   
-	  <groupid>org.apache.felix</groupid>
-	  <artifactid>maven-bundle-plugin</artifactid>
-	  <executions>
-	    <execution>
-	      <id>bundle-manifest</id>
-	      <phase>process-classes</phase>
-	      <goals>    
-	        <goal>manifest</goal>
-	      </goals>   
-	    </execution>
-	  </executions>
-	</plugin>
+<pre><code>&lt;plugin&gt;
+  &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;archive&gt;  
+      &lt;manifestFile&gt;${project.build.outputDirectory}/META-INF/MANIFEST.MF&lt;/manifestFile&gt;
+    &lt;/archive&gt; 
+  &lt;/configuration&gt;
+&lt;/plugin&gt;  
+&lt;plugin&gt;   
+  &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-bundle-plugin&lt;/artifactId&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;id&gt;bundle-manifest&lt;/id&gt;
+      &lt;phase&gt;process-classes&lt;/phase&gt;
+      &lt;goals&gt;    
+        &lt;goal&gt;manifest&lt;/goal&gt;
+      &lt;/goals&gt;   
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
 
-If you want to use packaging types other than "jar" and "bundle" then you also need to enable support
-for them in the bundleplugin configuration, for example if you want to use the plugin with WAR files:
+<p>If you want to use packaging types other than “jar” and “bundle” then you also need to enable support
+for them in the bundleplugin configuration, for example if you want to use the plugin with WAR files:</p>
 
-	<plugin>
-	  <groupid>org.apache.felix</groupid>
-	  <artifactid>maven-bundle-plugin</artifactid>
-	  <executions>
-	    <execution>
-	      <id>bundle-manifest</id>
-	      <phase>process-classes</phase>
-	      <goals>
-	        <goal>manifest</goal>
-	      </goals>
-	    </execution>
-	  </executions>
-	  <configuration>
-	    <supportedprojecttypes>
-	      <supportedprojecttype>jar</supportedprojecttype>
-	      <supportedprojecttype>bundle</supportedprojecttype>
-	      <supportedprojecttype>war</supportedprojecttype>
-	    </supportedprojecttypes>
-	    <instructions>
-	      <!-- ...etc... -->
-	    </instructions>
-	  </configuration>
-	</plugin>
+<pre><code>&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-bundle-plugin&lt;/artifactId&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;id&gt;bundle-manifest&lt;/id&gt;
+      &lt;phase&gt;process-classes&lt;/phase&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;manifest&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+  &lt;configuration&gt;
+    &lt;supportedProjectTypes&gt;
+      &lt;supportedProjectType&gt;jar&lt;/supportedProjectType&gt;
+      &lt;supportedProjectType&gt;bundle&lt;/supportedProjectType&gt;
+      &lt;supportedProjectType&gt;war&lt;/supportedProjectType&gt;
+    &lt;/supportedProjectTypes&gt;
+    &lt;instructions&gt;
+      &lt;!-- ...etc... --&gt;
+    &lt;/instructions&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
 
-You'll also need to configure the other plugin to pick up and use the generated manifest, which is written to ${project.build.outputDirectory}/META-INF/MANIFEST.MF by default (unless you choose a different manifestLocation in the maven-bundle-plugin configuration). Continuing with our WAR example:
+<p>You’ll also need to configure the other plugin to pick up and use the generated manifest, which is written to ${project.build.outputDirectory}/META-INF/MANIFEST.MF by default (unless you choose a different manifestLocation in the maven-bundle-plugin configuration). Continuing with our WAR example:</p>
 
-	<plugin>
-	  <groupid>org.apache.maven.plugins</groupid>
-	  <artifactid>maven-war-plugin</artifactid>
-	  <configuration>
-	    <archive>
-	      <manifestfile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestfile>
-	    </archive>
-	  </configuration>
-	</plugin>
+<pre><code>&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;archive&gt;
+      &lt;manifestFile&gt;${project.build.outputDirectory}/META-INF/MANIFEST.MF&lt;/manifestFile&gt;
+    &lt;/archive&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
 
-## Using the Workspace/Project facilities
+<h2 id="using-the-workspaceproject-facilities">Using the Workspace/Project facilities</h2>
 
-Though the Apache Felix Maven Bundle plugin is used in a 'maven first' model, it can actually also be used with some of the benefits of using bndlib more direct so that for example bndtools can be used. In this model, the POM includes a bnd file that is also used by bnd(tools). This is far from perfect since it will be necessary to maintain the classpath in two different places: through the transitive dependencies in the POM and in bnd. It will also not provide full fidelity between the maven build and the IDE build since other plugins in maven are ignored. However, it will allow the use of bndtools as the primary IDE, which allows you to develop bundles faster than any other environment.
+<p>Though the Apache Felix Maven Bundle plugin is used in a ‘maven first’ model, it can actually also be used with some of the benefits of using bndlib more direct so that for example bndtools can be used. In this model, the POM includes a bnd file that is also used by bnd(tools). This is far from perfect since it will be necessary to maintain the classpath in two different places: through the transitive dependencies in the POM and in bnd. It will also not provide full fidelity between the maven build and the IDE build since other plugins in maven are ignored. However, it will allow the use of bndtools as the primary IDE, which allows you to develop bundles faster than any other environment.</p>
 
-If you want to use this model, be aware that bnd has a strict disk layout for the workspace. A workspace is a directory with a `cnf` directory and project directory. It is not possible to create arbitrary layouts. For maven, the disk layout should be:
+<p>If you want to use this model, be aware that bnd has a strict disk layout for the workspace. A workspace is a directory with a <code>cnf</code> directory and project directory. It is not possible to create arbitrary layouts. For maven, the disk layout should be:</p>
 
-	./com.acme.prime/					workspace
-		cnf/							configuration
-			ext/						extensions
-				maven.bnd				contains the maven plugin setup
-			build.bnd					your shared settings
-		pom.xml							maven modules
-		com.acme.prime.speaker.api/		project directory
-			pom.xml						
-			src/
-				main/
-					java/
-				test/
-					java
-			target/
-				classes/
-				test-classes/
+<pre><code>./com.acme.prime/					workspace
+	cnf/							configuration
+		ext/						extensions
+			maven.bnd				contains the maven plugin setup
+		build.bnd					your shared settings
+	pom.xml							maven modules
+	com.acme.prime.speaker.api/		project directory
+		pom.xml						
+		src/
+			main/
+				java/
+			test/
+				java
+		target/
+			classes/
+			test-classes/
+</code></pre>
 
-You can include files with the -include instruction:
+<p>You can include files with the -include instruction:</p>
 
-	  <instructions>
-	    <_include>bnd.bnd</_include>
-	  </instructions>
+<pre><code>  &lt;instructions&gt;
+    &lt;_include&gt;bnd.bnd&lt;/_include&gt;
+  &lt;/instructions&gt;
+</code></pre>
 
-Now you can add the instruction in the `bnd.bnd` file:
+<p>Now you can add the instruction in the <code>bnd.bnd</code> file:</p>
 
-	Export-Package: com.acme.prime.speaker.api
-	Private-Package: com.acme.prime.speaker.provider.*
-	-dsannotations: true
+<pre><code>Export-Package: com.acme.prime.speaker.api
+Private-Package: com.acme.prime.speaker.provider.*
+-dsannotations: true
+</code></pre>
 
-The easiest way to setup such a workspace is is by adding the bnd maven plugin:
+<p>The easiest way to setup such a workspace is is by adding the bnd maven plugin:</p>
 
-	$ bnd add workspace com.acme.prime
-	$ cd com.acme.prime
-	$ bnd add plugin maven
-	
-The bnd maven plugin will automatically maintain a pom.xml in the workspace containing the workspace projects. 
- 
-	$ bnd add project com.acme.speaker.api
-	$ more pom.xml
-	<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	    <modelversion>4.0.0</modelversion>
-	    
-	    <groupid>/Users/aqute/tmp/com.acme.prime</groupid>
-	    <artifactid>root</artifactid>
-	    <packaging>pom</packaging>
-	    
-	    <modules>
-	    <!-- DO NOT EDIT MANAGED BY BND MAVEN LIFECYCLE PLUGIN -->
-	        <module>com.acme.prime.speaker.api</module>
-	    </modules>
-	</project>
+<pre><code>$ bnd add workspace com.acme.prime
+$ cd com.acme.prime
+$ bnd add plugin maven
+</code></pre>
 
-You can edit this file to add more specific information, the bnd maven plugin will only change the marked part.
+<p>The bnd maven plugin will automatically maintain a pom.xml in the workspace containing the workspace projects. </p>
 
-The maven bnd plugin also changes the file layout to match the default maven file layout. Take a look at `cnf/ext/maven.bnd` for the details.
+<pre><code>$ bnd add project com.acme.speaker.api
+$ more pom.xml
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    
+    &lt;groupId&gt;/Users/aqute/tmp/com.acme.prime&lt;/groupId&gt;
+    &lt;artifactId&gt;root&lt;/artifactId&gt;
+    &lt;packaging&gt;pom&lt;/packaging&gt;
+    
+    &lt;modules&gt;
+    &lt;!-- DO NOT EDIT MANAGED BY BND MAVEN LIFECYCLE PLUGIN --&gt;
+        &lt;module&gt;com.acme.prime.speaker.api&lt;/module&gt;
+    &lt;/modules&gt;
+&lt;/project&gt;
+</code></pre>
 
-## Links
+<p>You can edit this file to add more specific information, the bnd maven plugin will only change the marked part.</p>
 
-* [Secrets of the Felix Bundle Plugin Revealed][2] – Interesting blog about using the bndlib macros inside the plugin to handle semantic versioning
+<p>The maven bnd plugin also changes the file layout to match the default maven file layout. Take a look at <code>cnf/ext/maven.bnd</code> for the details.</p>
 
-[1]: http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html
-[2]: http://davidvaleri.wordpress.com/2011/04/07/secrets-of-the-felix-bundle-plug-in-macros-revealed/
-[3]: http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html#ApacheFelixMavenBundlePlugin(BND)
-</packaging></export-package>
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="http://davidvaleri.wordpress.com/2011/04/07/secrets-of-the-felix-bundle-plug-in-macros-revealed/">Secrets of the Felix Bundle Plugin Revealed</a> – Interesting blog about using the bndlib macros inside the plugin to handle semantic versioning</li>
+</ul>
+
 
 			</div>
 	</ul>
