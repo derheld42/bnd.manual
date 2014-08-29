@@ -72,6 +72,10 @@
 	
 		
 	
+		
+	
+		
+	
 
 </head>
 
@@ -180,6 +184,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/610-plugin.html">Plugins</a>
+	  	
+  	
+		
 			<li><a href="/chapters/700-tools.html">Tools bound to bnd</a>
 	  	
   	
@@ -201,6 +209,10 @@
   	
 		
 			<li><a href="/chapters/860-commands.html">Command Reference</a>
+	  	
+  	
+		
+			<li><a href="/chapters/870-plugins.html">Plugins Reference</a>
 	  	
   	
 		
@@ -329,8 +341,6 @@ eclipse.bnd			git.bnd
 
 <p>As you can see, the <code>eclipse.bnd</code> file defines the property <code>-plugin.eclipse</code>. In most cases that a value should be settable in different places, bndlib uses <em>merged properties</em>. When bndlib loads the plugins, it actually gets the property <code>-plugin</code>, merged with any other property that has a key that starts with <code>-plugin.</code> (ordered alphabetically). This allows you to add to a merged property anywhere in the many places in bndlib where you can set properties.  </p>
 
-<p>You can add your own custom plugins as well. Since these are likely not embedded in bndlib you can actually specify a JAR to load them from. See ###</p>
-
 <p>So now we can try to build the workspace:</p>
 
 <pre><code>$ bnd build
@@ -351,6 +361,8 @@ $ ls -a com.acme.prime.hello/
 </code></pre>
 
 <p>This classic layout defines separate source folders for the main code and the test code. The <code>generated</code> directory is a temporary directory, it contains the artifacts produced by this build. </p>
+
+<h2 id="setup">Setup</h2>
 
 <h2 id="changing-the-layout">Changing the Layout</h2>
 <p>This is a classical Eclipse layout, with a separate <code>src</code> and <code>test</code> folder. However, this is not baked into bndlib, it is possible to, for example, use the maven layout with the <code>src/main/java</code>, <code>src/test/java</code>, and <code>target</code> directories. We can try this out with the maven plugin.</p>

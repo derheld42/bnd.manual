@@ -65,6 +65,10 @@
 	
 		
 	
+		
+	
+		
+	
 
 </head>
 
@@ -173,6 +177,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/610-plugin.html">Plugins</a>
+	  	
+  	
+		
 			<li><a href="/chapters/700-tools.html">Tools bound to bnd</a>
 	  	
   	
@@ -197,6 +205,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/870-plugins.html">Plugins Reference</a>
+	  	
+  	
+		
 			<li><a href="/chapters/880-settings.html">Settings</a>
 	  	
   	
@@ -216,7 +228,9 @@
 		<li span=9>
 			<div class=notes-margin>
 				<h1> -pluginpath* PARAMETERS</h1>
-				<pre><code>/**
+				<p>Plugins not embedded in bndlib must load their classes from JARs or directories. Though these JARs can be specified on the <code>-plugin</code> instruction, it is also possible to specify them separate. The <code>-pluginpath</code> is a merged property so it is possible to specify clauses in multiple places, these will all be merged together.</p>
+
+<pre><code>/**
  * Add the @link {@link Constants#PLUGINPATH} entries (which are file names)
  * to the class loader. If this file does not exist, and there is a
  * {@link Constants#PLUGINPATH_URL_ATTR} attribute then we download it first

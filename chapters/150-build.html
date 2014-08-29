@@ -72,6 +72,10 @@
 	
 		
 	
+		
+	
+		
+	
 
 </head>
 
@@ -180,6 +184,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/610-plugin.html">Plugins</a>
+	  	
+  	
+		
 			<li><a href="/chapters/700-tools.html">Tools bound to bnd</a>
 	  	
   	
@@ -204,6 +212,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/870-plugins.html">Plugins Reference</a>
+	  	
+  	
+		
 			<li><a href="/chapters/880-settings.html">Settings</a>
 	  	
   	
@@ -223,7 +235,76 @@
 		<li span=9>
 			<div class=notes-margin>
 				<h1> Build</h1>
-				<h2 id="project-properties">Project Properties</h2>
+				<p>This chapter lays out the rules of the file system for bnd projects. It discusses the workspace layout and the projects layout as well as the properties.</p>
+
+<h2 id="workspace">Workspace</h2>
+<p>A Workspace is a single directory with all its sub-directories and their files, similar to a git workspace. The core idea of the workspace is that it is easy to move around, that is, it allows the use of relative file names. It also prevents a lot of potential problems that occur when you allow projects to be anywhere on the file system. KISS!</p>
+
+<p>Workspaces should be named according to the bundle symbolic names of its projects. Using such a naming strategy will simplify finding the correct namespace given a bundle symbolic name. </p>
+
+<p>A bndlib workspace is a <em>valid</em> workspace when it contains a <code>cnf</code> file. If this is a text file, its content is read and interpreted as a path to the <code>cnf</code> directory (which can again be a path to a cnf directory, ad infinitum). The retrieved path is retrieved and trimmed after which it is resolved relative to its parent directory.   </p>
+
+<p>However, the advised model is to use a directory with a <code>cnf/build.bnd</code> file. The purpose of the <code>cnf</code> directory is to provide a place for shared information. Though this includes bndlib setup information, it also can be used to define for example shared licensing, copyright, and vendor headers for your organization.</p>
+
+<p>The <code>cnf</code> directory can have an <code>ext</code> directory, this directory contains any extensions to bnd.</p>
+
+<p>To cache some intermediate files, bndlib will create a <code>cnf/cache/</code> directory, this file should not be under source control. E.g. in Git it should be defined in the <code>.gitignore</code> file. </p>
+
+<p>The root of the workspace is generally used to hold other files. For example the <code>.git</code> directory for Git, or gradle and ant files for continuous integration. However, designers that add functionality to the workspace shoudl strive to minimize the clutter in the root. For example, the bnd gradle support adds a few files to the root but these link to a <code>cnf/gradle</code> directory for their actual content.</p>
+
+<p>Other directories in the workspace represent <em>projects</em>. The name of the project is the bundle symbolic name of the bundle that it produces (or the prefix of the bundle symbolic name when it produces multiple bundles).</p>
+
+<p>Overall, this gives us the following layout for a workspace:</p>
+
+<pre><code>com.acme.prime/                     workspace
+  cnf/                              configuration/setup
+    ext/                            extensions
+      maven.bnd                     maven setup extension
+    build.bnd                       organization setup
+    plugins/                        directory for plugins
+    cache/                          bnd cache directory, should not be saved in an scm
+  com.acme.prime.speaker/           project directory	  
+</code></pre>
+
+<h3 id="workspace-properties">Workspace Properties</h3>
+
+<p>Properties are used for headers, macros, and instructions in bndlib, they are quite fundamental. To simplify maintenance, bndlib provides an elaborate mechanism to provide these properties from different places and <em>inherit</em> them. The workspace resides at the top of this inheritance chain (ok, after the built-in defaults).</p>
+
+<p>When a workspace is created, it will first read in the properties in the <code>.bnd</code> files in the <code>cnf/ext</code> directory. These are called the <em>extension files</em> since they in general setup plugins and other extensions. The order in which they are read is the lexical sorting order of their file names.</p>
+
+<h3 id="extension-files">Extension Files</h3>
+
+<p>Extension files allow you to separate configuration concerns. Its primary purpose is to allow third party extensions. These extensions can then put their properties in one place. The contents of these files should therefore not be touched so that a new version can override them. Each extension file is read as a bnd file, this means that full power of bndlib is available. The bnd command line tool has facilities to add and remove files from this directory.</p>
+
+<p>For example, the Maven plugin that is built-in to bndlib has an extension file called maven.bnd which looks as follows:</p>
+
+<pre><code>#
+# Plugin maven setup
+#
+-plugin.maven = aQute.bnd.plugin.maven.MavenPlugin
+
+
+#
+# Change disk layout to fit maven
+#
+
+-outputmask = ${@bsn}-${version;===S;${@version}}.jar
+src=src/main/java
+bin=target/classes
+testsrc=src/test/java
+testbin=target/test-classes
+target-dir=target
+</code></pre>
+
+<p>We will not explain this plugin here </p>
+
+<p>After reading the extension files, bndlib reads the <code>cnf/build.bnd</code> file, this file is supposed to hold the organization specific properties. Out of the box, this file comes empty, ready to be filled by you.</p>
+
+<h3 id="workspace-plugins">Workspace Plugins</h3>
+
+<p>A <em>plugin</em> is a piece of code that runs inside bnd. The workspace provides a number of standard built-in plugins like an Executor, a Randum number generator, itself, etc. Additional plugins can be added with the <code>-plugin.*</code> instructions.  </p>
+
+<h2 id="project-properties">Project Properties</h2>
 <p>There are a number of built in properties that are set by bnd:</p>
 
 <table>

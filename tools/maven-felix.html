@@ -65,6 +65,10 @@
 	
 		
 	
+		
+	
+		
+	
 
 </head>
 
@@ -173,6 +177,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/610-plugin.html">Plugins</a>
+	  	
+  	
+		
 			<li><a href="/chapters/700-tools.html">Tools bound to bnd</a>
 	  	
   	
@@ -194,6 +202,10 @@
   	
 		
 			<li><a href="/chapters/860-commands.html">Command Reference</a>
+	  	
+  	
+		
+			<li><a href="/chapters/870-plugins.html">Plugins Reference</a>
 	  	
   	
 		
@@ -267,7 +279,11 @@ com.acme.prime.speaker.provider.windows
 
 <h2 id="embed-dependency">Embed-Dependency</h2>
 
-<p>The Apache Felix Maven plugin supports a special instruction <embed-dependency> that will automatically include maven transitive dependencies in the JAR and place these JARs on the Bundle-ClassPath. This feature is explained in [Embedding Dependencies][2]. This is a convenient feature that is not so wise to use since it makes the actual bundle depending on many aspects that are not under direct control. A bundle is a component and should reflect an implementation of a public API; this model requires that you think about what goes in there and what does not go in there. Adding transitive dependencies inside this bundle tends to create very complex systems that destroy the benefits of OSGi.</embed-dependency></p>
+<p>The Apache Felix Maven plugin supports a special instruction <embed-dependency> that will automatically include maven transitive dependencies in the JAR and place these JARs on the Bundle-ClassPath. This feature is explained in [Embedding Dependencies][2]. </embed-dependency></p>
+
+<blockquote>
+  <p>This is a convenient feature that is not so wise to use since it makes the actual bundle depending on many aspects that are not under direct control. A bundle is a component and should reflect an implementation of a public API; this model requires that you think about what goes in there and what does not go in there. Adding transitive dependencies inside this bundle tends to create very complex systems that destroy the benefits of OSGi.</p>
+</blockquote>
 
 <h2 id="defaults">Defaults</h2>
 
@@ -500,22 +516,22 @@ for them in the bundleplugin configuration, for example if you want to use the p
 
 <p>If you want to use this model, be aware that bnd has a strict disk layout for the workspace. A workspace is a directory with a <code>cnf</code> directory and project directory. It is not possible to create arbitrary layouts. For maven, the disk layout should be:</p>
 
-<pre><code>./com.acme.prime/					workspace
-	cnf/							configuration
-		ext/						extensions
-			maven.bnd				contains the maven plugin setup
-		build.bnd					your shared settings
-	pom.xml							maven modules
-	com.acme.prime.speaker.api/		project directory
-		pom.xml						
-		src/
-			main/
-				java/
-			test/
-				java
-		target/
-			classes/
-			test-classes/
+<pre><code>  ./com.acme.prime/                workspace
+    cnf/                           configuration
+      ext/                         extensions
+        maven.bnd                  contains the maven plugin setup
+      build.bnd                    your shared settings
+    pom.xml                        maven modules POM
+    com.acme.prime.speaker.api/    project directory
+      pom.xml                      your project POM
+      src/                         maven source directory
+        main/
+          java/
+        test/
+          java/
+      target/
+        classes/                   output directory
+        test-classes/              test output
 </code></pre>
 
 <p>You can include files with the -include instruction:</p>

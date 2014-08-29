@@ -65,6 +65,10 @@
 	
 		
 	
+		
+	
+		
+	
 
 </head>
 
@@ -173,6 +177,10 @@
 	  	
   	
 		
+			<li><a href="/chapters/610-plugin.html">Plugins</a>
+	  	
+  	
+		
 			<li><a href="/chapters/700-tools.html">Tools bound to bnd</a>
 	  	
   	
@@ -194,6 +202,10 @@
   	
 		
 			<li><a href="/chapters/860-commands.html">Command Reference</a>
+	  	
+  	
+		
+			<li><a href="/chapters/870-plugins.html">Plugins Reference</a>
 	  	
   	
 		
@@ -861,6 +873,11 @@ dl.property-index dd {
   color: #720f10; }
   .selected:before {
     content: "\25B7\00A0"; }
+
+embed.illustration {
+  display: block;
+  margin-left: auto;
+  margin-right: auto; }
 
 			</div>
 	</ul>
