@@ -447,6 +447,27 @@ A library package is not an API that can be implemented by other bundles, it is 
 
 <p>Since an error is raised when the baselining detects an semantic version violation it is possible to release a snapshot in a build only when there is a correctly baselined bundle built.</p>
 
+<h2 id="why-does-bnd-use-only-major-and-minor-version-component-in-import-package-headers">Why does bnd use only major and minor version component in import-package headers?</h2>
+
+<p>The micro is left out because it generates a lot of unnecessary releases, this is similar to the maven release process. If you connect everything 100%, you cannot move anything unless all its dependencies are moved at the same time. We actually tried in the OSGi build to use micro version changes for default methods in Java 8 but found that it just creates an enormous ripple through effect in the build. Not depending on the micro version is a lubricant that does not kill any bundle out there that depends on you.</p>
+
+<p>This should not be a problem because a micro version is a deployment issue since the semantic versioning should be used for APIs and a micro change is not visible in the API. </p>
+
+<p>That said, this is bnd so obviously you can override it. You can override the default version policy is:</p>
+
+<pre><code>-provider-policy = ${range;[==,=+)}
+-consumer-policy = ${range;[==,+)}
+</code></pre>
+
+<p>Just set ‘===’ instead of ‘==’ for the floor version in your pom.xml in the <configuration> section and you should be ok.</configuration></p>
+
+<pre><code>&lt;configuration&gt;
+	&lt;_provider-policy&gt;${range;[===,=+)}&lt;/_provider-policy&gt;
+	&lt;_consumer-policy&gt;${range;[===,+)}&lt;/_consumer-policy&gt;
+&lt;/configuration&gt;
+</code></pre>
+
+
 			</div>
 	</ul>
 

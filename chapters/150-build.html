@@ -296,7 +296,16 @@ testbin=target/test-classes
 target-dir=target
 </code></pre>
 
-<p>We will not explain this plugin here (you can find it in the plugin sections), it only illustrates here how it is possible to setup the environment for a specific optional functionality.</p>
+<p>We will not explain this plugin here (you can find it in the plugin sections), it only illustrates here how it is possible to setup the environment for a specific optional functionality like a plugin.</p>
+
+<p>If you create local extension files then you should use a prefix to identify this is your file, like:</p>
+
+<pre><code>com.acme-local.bnd
+</code></pre>
+
+<p>It is possible to use file links to maintain these files in one place when you have many workspaces.</p>
+
+<h3 id="local-customizations">Local customizations</h3>
 
 <p>After reading the extension files, bndlib reads the <code>cnf/build.bnd</code> file, this file is supposed to hold the organization specific properties. Out of the box, this file comes empty, ready to be filled by you.</p>
 

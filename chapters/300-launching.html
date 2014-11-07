@@ -247,6 +247,33 @@
   <li><code>-runsystempackages</code> — An Export-Package list for packages exported by the system bundle.</li>
 </ul>
 
+<h2 id="packaging">Packaging</h2>
+
+<p>Any bndrun file can be packaged by the launcher plugin. This creates an executable JAR that will contain all its dependencies.</p>
+
+<pre><code>$ bnd package xyz.bndrun
+</code></pre>
+
+<h2 id="exit-codes">Exit codes</h2>
+
+<p>If the framework stops the launcher will exit. It will set a system exit code that reflects the event type from that the framework returned. The shell script that started the launcher can take the system exit code into account to restart the framework in certain cases.</p>
+
+<pre><code>OSGi FrameworkEvent             Launcher Constant  Value
+STOPPED                         STOPPED            -9
+WAIT_TIMEDOUT	                TIMEDOUT           -3
+ERROR                           ERROR              -2
+WARNING                         WARNING            -1
+STOPPED_BOOTCLASSPATH_MODIFIED  STOPPED_UPDATE     -4
+STOPPED_UPDATE                  STOPPED_UPDATE     -4
+</code></pre>
+
+<p>The launcher therefore returns the process exit code UPDATE_NEEDED(-4) when it requires an update. This was chosen over doing an in-process update because it is much safer. So the launching script should look something like:</p>
+
+<pre><code>do {
+  bnd run app.bndrun
+} while ($?==-4)
+</code></pre>
+
 			</div>
 	</ul>
 
