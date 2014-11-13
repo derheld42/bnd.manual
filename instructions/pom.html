@@ -85,7 +85,7 @@
 			</a><a href="/chapters/850-macros.html">Macros</a>
 			
 	<li class=menu-link span=4>
-			<a href="https://github.com/bndtools/bnd" target="_"><img
+			<a href="https://github.com/bndtools/bnd.manual" target="_"><img
 	style="position:absolute;top:0;right:0;margin:0;padding:0;z-index:100"
 	src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
 	alt="Fork me on GitHub"
@@ -227,8 +227,9 @@
 			
 		<li span=9>
 			<div class=notes-margin>
+				<div style="float:right"><a href="">edit</a></div>
 				<h1> -pom BOOLEAN | PROPERTIES</h1>
-				<p>The <code>-pom</code> instruction can generate a pom derived from the manifest and store it in the bundle. The default will be splitting up the Bundle Symbolic name in a <code>groupid</code> (everything until the last ‘.’) and a <code>artifactid</code> (everthing from the last ‘.’ to the end. However, it is also specify overrides in propterties. The following properties are supported:</p>
+				<p>The <code>-pom</code> instruction can generate a pom derived from the manifest and store it in the bundle. The default will be splitting up the Bundle Symbolic name in a <code>groupid</code> (everything until the last ‘.’) and a <code>artifactid</code> (everything from the last ‘.’ to the end. However, it is also specify overrides in properties. The following properties are supported:</p>
 
 <table>
   <tbody>
@@ -265,8 +266,31 @@
 <ul>
   <li><code>Bundle-Description</code></li>
   <li><code>Bundle-DocUrl</code></li>
-  <li><code>Bundle-Vendor</code></li>
+  <li><code>Bundle-Vendor</code>  – If the  value ends with a HTTP or HTTPS url then this URL is used as the organization URL and the name with be the part without the URL. Otherwise the whole value is used as the value for the organization name.</li>
   <li><code>Bundle-License</code></li>
+  <li>
+    <p><code>Bundle-Developer</code> – This is an unofficial header. The key must be the email. It consist of the following parameters:</p>
+
+    <pre><code>email                      Email address mandatory
+id                         A developer id (default address)   name                       Name of the developer   organization               Name of the organization   organizationUrl            URL of the organization   roles                      Roles of the developer (comma separated)   timezone                   Three letter time zone
+</code></pre>
+
+    <p>Bundle-Developer: Peter.Kriens@aQute.biz; \
+      name=”Peter Kriens”; \
+      organization=aQute; \
+      roles=”programmer,gopher”</p>
+  </li>
+  <li>
+    <p><code>Bundle-SCM</code> – This is an unofficial header. The key must be the It consists of the following parameters:</p>
+
+    <p>connection                 Read only connection
+  developerConnection        Developer connection
+  url                        The URL for a web front end to your SCM system.     </p>
+
+    <p>Bundle-SCM: url=http://github.com/bndtools, \
+      connection=scm:git:https://github.com/bndtools/bnd, \
+      developerConnection=scm:git:git@github.com/bndtools/bnd</p>
+  </li>
 </ul>
 
 <h2 id="example">Example</h2>

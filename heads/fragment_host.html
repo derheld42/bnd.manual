@@ -85,7 +85,7 @@
 			</a><a href="/chapters/850-macros.html">Macros</a>
 			
 	<li class=menu-link span=4>
-			<a href="https://github.com/bndtools/bnd" target="_"><img
+			<a href="https://github.com/bndtools/bnd.manual" target="_"><img
 	style="position:absolute;top:0;right:0;margin:0;padding:0;z-index:100"
 	src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
 	alt="Fork me on GitHub"
@@ -227,6 +227,7 @@
 			
 		<li span=9>
 			<div class=notes-margin>
+				<div style="float:right"><a href="">edit</a></div>
 				<h1> Fragment-Host       ::= bundle-description</h1>
 				<pre><code>The Fragment-Host manifest header links the fragment to its potential hosts. It must conform to the following syntax: Fragment-Host       ::= bundle-description bundle-description  ::= symbolic-name
                         ( ';' parameter )* // See 1.3.2 The following directives are architected by the Framework for Fragment-Host: • extension - Indicates this extension is a system or boot class path extension. It is only applica- ble when the Fragment-Host is the System Bundle. This is discussed in Extension Bundles on page 85. The following values are supported: • framework - The fragment bundle is a Framework extension bundle (default). • bootclasspath - The fragment bundle is a boot class path extension bundle. The fragment must be the bundle symbolic name of the implementation specific system bundle or the alias system.bundle. The Framework should fail to install an extension bundle when the bundle symbolic name is not referring to the system bundle. The following attributes are architected by the Framework for Fragment-Host: • bundle-version - The version range to select the host bundle. If a range is used, then the frag- ment can attach to multiple hosts. See Semantic Versioning on page 54. The default value is [0.0.0,∞). The Fragment-Host header can assert arbitrary attributes that must be matched before a host is eligi- ble.

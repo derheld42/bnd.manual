@@ -85,7 +85,7 @@
 			</a><a href="/chapters/850-macros.html">Macros</a>
 			
 	<li class=menu-link span=4>
-			<a href="https://github.com/bndtools/bnd" target="_"><img
+			<a href="https://github.com/bndtools/bnd.manual" target="_"><img
 	style="position:absolute;top:0;right:0;margin:0;padding:0;z-index:100"
 	src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
 	alt="Fork me on GitHub"
@@ -227,6 +227,7 @@
 			
 		<li span=9>
 			<div class=notes-margin>
+				<div style="float:right"><a href="">edit</a></div>
 				<h1> Export-Package  ::= export ( ',' export)*</h1>
 				<p>The bnd definition allows the specification to be done using ‘‘patterns’’, a modified regular expression. All patterns in the definition are matched against every package on the [ class path][#CLASSPATH ]. If the pattern is a negating pattern (starts with !) and it is matched, then the package is completely excluded. Normal patterns cause the package to be included in the resulting bundle. Patterns can include both directives and attributes, these items will be copied to the output. The list is ordered, earlier patterns take effect before later patterns. The following examples copies everything on the class path except for packages starting with <code>com</code>. The default for Export-Package is “*”, which can result in quite large bundles. If the source packages have an associated version (from their manifest of packageinfo file), then this version is automatically added to the clauses.</p>
 

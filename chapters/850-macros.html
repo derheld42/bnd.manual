@@ -62,8 +62,7 @@
 				 body {
 					counter-reset: h1 25;
 				}
-			</style>
-				
+			</style>	
 		
 	
 		
@@ -92,7 +91,7 @@
 			</a><a href="/chapters/850-macros.html">Macros</a>
 			
 	<li class=menu-link span=4>
-			<a href="https://github.com/bndtools/bnd" target="_"><img
+			<a href="https://github.com/bndtools/bnd.manual" target="_"><img
 	style="position:absolute;top:0;right:0;margin:0;padding:0;z-index:100"
 	src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
 	alt="Fork me on GitHub"
@@ -234,6 +233,7 @@
 			
 		<li span=9>
 			<div class=notes-margin>
+				<div style="float:right"><a href="">edit</a></div>
 				<h1> Macro Reference</h1>
 				<p>A simple macro processor is added to the header processing. Variables allow a single definition of a value, and the use of derivations. Each header is a macro that can be expanded. Notice that headers that do not start with an upper case character will not be copied to the manifest, so they can be used as working variables. Variables are expanded by enclosing the name of the variable in <code>${&lt;name&gt;}</code> (curly braces) or <code>$(&lt;name&gt;)</code> (parenthesis). Additionally, square brackets [], angled brackets &lt;&gt;, double guillemets «», and single guillemets ‹› are also allowed for brackets. If brackets are nested, that is $[replace;acaca;a(.*)a;[$1]] will return <code>[cac]</code>.</p>
 
