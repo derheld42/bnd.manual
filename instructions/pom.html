@@ -271,14 +271,20 @@
   <li>
     <p><code>Bundle-Developer</code> – This is an unofficial header. The key must be the email. It consist of the following parameters:</p>
 
-    <pre><code>email                      Email address mandatory
-id                         A developer id (default address)   name                       Name of the developer   organization               Name of the organization   organizationUrl            URL of the organization   roles                      Roles of the developer (comma separated)   timezone                   Three letter time zone
-</code></pre>
+    <p>email                      Email address mandatory
+  id                         A developer id (default address)
+  name                       Name of the developer
+  organization               Name of the organization
+  organizationUrl            URL of the organization
+  roles                      Roles of the developer (comma separated)
+  timezone                   Three letter time zone</p>
 
-    <p>Bundle-Developer: Peter.Kriens@aQute.biz; \
-      name=”Peter Kriens”; \
-      organization=aQute; \
-      roles=”programmer,gopher”</p>
+    <pre><code>Bundle-Developer: 
+  Peter.Kriens@aQute.biz;
+    name="Peter Kriens";
+    organization=aQute;
+    roles="programmer,gopher"
+</code></pre>
   </li>
   <li>
     <p><code>Bundle-SCM</code> – This is an unofficial header. The key must be the It consists of the following parameters:</p>
@@ -287,9 +293,11 @@ id                         A developer id (default address)   name              
   developerConnection        Developer connection
   url                        The URL for a web front end to your SCM system.     </p>
 
-    <p>Bundle-SCM: url=http://github.com/bndtools, \
-      connection=scm:git:https://github.com/bndtools/bnd, \
-      developerConnection=scm:git:git@github.com/bndtools/bnd</p>
+    <pre><code>Bundle-SCM: 
+  url=http://github.com/bndtools,
+  connection=scm:git:https://github.com/bndtools/bnd,
+  developerConnection=scm:git:git@github.com/bndtools/bnd
+</code></pre>
   </li>
 </ul>
 
@@ -305,33 +313,61 @@ Bundle-Version: 1.2.3.qualifier
 <p>Generates the following pom in <code>pom.xml</code>:</p>
 
 <pre><code>&lt;project 	xmlns="http://maven.apache.org/POM/4.0.0" 
-		xmlns:xsi="" 
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
-  		&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  		&lt;groupId&gt;com.example&lt;/groupId&gt;
-  		&lt;artifactId&gt;foo&lt;/artifactId&gt;
-  		&lt;version&gt;1.2.3.qualifier&lt;/version&gt;
-  		&lt;name&gt;com.example.foo&lt;/name&gt;
+  	xmlns:xsi="" 
+  	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+  	  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  	  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  	  &lt;artifactId&gt;foo&lt;/artifactId&gt;
+  	  &lt;version&gt;1.2.3.qualifier&lt;/version&gt;
+  	  &lt;name&gt;com.example.foo&lt;/name&gt;
 &lt;/project&gt;
 </code></pre>
 
 <p>You can override the different parts of the Maven coordinates:</p>
 
-<pre><code>Bundle-SymbolicName: com.example.foo
-Bundle-Version: 1.2.3.qualifier
--pom: groupid=com.example,where=META-INF/maven/pom.xml,version=${version;==;${Bundle-Version}}
+<pre><code>Bundle-SymbolicName:          com.example.foo
+Bundle-Version:               1.2.3.qualifier
+Bundle-Developer:             Peter.Kriens@aQute.biz;
+  name="Peter Kriens";
+  organization=aQute;
+  roles="programmer,gopher"
+Bundle-SCM: url=http://github.com/bndtools,
+  connection=scm:git:https://github.com/bndtools/bnd,
+  developerConnection=scm:git:git@github.com/bndtools/bnd
+-pom: groupid=com.example,
+  where=META-INF/maven/pom.xml,
+  version=${version;==;${Bundle-Version}}
 </code></pre>
 
 <p>Generates the following pom in <code>META-INF/maven/pom.xml</code>:</p>
 
-<pre><code>&lt;project 	xmlns="http://maven.apache.org/POM/4.0.0" 
-		xmlns:xsi="" 
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
-  		&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  		&lt;groupId&gt;com.example&lt;/groupId&gt;
-  		&lt;artifactId&gt;com.example.foo&lt;/artifactId&gt;
-  		&lt;version&gt;1.2&lt;/version&gt;
-  		&lt;name&gt;com.example.foo&lt;/name&gt;
+<pre><code>&lt;project 	
+  xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="" 
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+  	http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+  	  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  	  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  	  &lt;artifactId&gt;com.example.foo&lt;/artifactId&gt;
+  	  &lt;version&gt;1.2&lt;/version&gt;
+  	  &lt;name&gt;com.example.foo&lt;/name&gt;
+  &lt;scm&gt;
+    &lt;url&gt;http://github.com/bndtools&lt;/url&gt;
+    &lt;connection&gt;scm:git:https://github.com/bndtools/bnd&lt;/connection&gt;
+    &lt;developerConnection&gt;scm:git:git@github.com/bndtools/bnd&lt;/developerConnection&gt;
+  &lt;/scm&gt;
+  &lt;developers&gt;
+    &lt;developer&gt;
+      &lt;id&gt;Peter.Kriens@aQute.biz&lt;/id&gt;
+      &lt;name&gt;Peter Kriens&lt;/name&gt;
+      &lt;organization&gt;aQute&lt;/organization&gt;
+      &lt;roles&gt;
+        &lt;role&gt;programmer&lt;/role&gt;
+        &lt;role&gt;gopher&lt;/role&gt;
+      &lt;/roles&gt;
+      &lt;email&gt;Peter.Kriens@aQute.biz&lt;/email&gt;
+    &lt;/developer&gt;
+  &lt;/developers&gt;
 &lt;/project&gt;
 </code></pre>
 
