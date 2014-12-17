@@ -420,7 +420,7 @@ Some-Header-3: ${unescape;.}/conf/jetty/admin.xml
 <dt><a href="/macros/unescape.html">unescape ( ';' STRING )*</a></dt><dd>The concatenated input will have all \n, \r, \b, \f, and \t replaced with their control code.</dd>
 <dt><a href="/macros/uniq.html">uniq (';' LIST )*</a></dt><dd>Concatenate the lists and then remove any duplicates.</dd>
 <dt><a href="/macros/user.html">user ';' KEY ( ';' DEFAULT )?</a></dt><dd>A current user setting from the ~/.bnd/settings.json file</dd>
-<dt><a href="/macros/version.html">version ';' MASK (';' VERSION )</a></dt><dd>Modify a version to set a version policy. The policy is a mask that is mapped to a version.</dd>
+<dt><a href="/macros/version.html">version(mask)? ';' MASK (';' VERSION )</a></dt><dd>Modify a version to set a version policy. The policy is a mask that is mapped to a version.</dd>
 <dt><a href="/macros/warning.html">warning ( ';' STRING )*</a></dt><dd>Raise an error consisting of all concatenated strings</dd>
 <dt><a href="/macros/workspace.html">workspace</a></dt><dd>The absolute file path to the current workspace</dd>
 
