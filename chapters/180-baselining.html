@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="/css/style.css" rel="stylesheet" />
-<title>-resourceonly  BOOLEAN</title>
+<title>Baselining</title>
 
 	
 		
@@ -29,6 +29,12 @@
 	
 		
 	
+		
+			<style>
+				 body {
+					counter-reset: h1 11;
+				}
+			</style>	
 		
 	
 		
@@ -145,7 +151,7 @@
 	  	
   	
 		
-			<li><a href="/chapters/180-baselining.html">Baselining</a>
+			<li class=selected>Baselining
 	  	
   	
 		
@@ -240,18 +246,45 @@
 		<li span=9>
 			<div class=notes-margin>
 				<div style="float:right"><a href="">edit</a></div>
-				<h1> -resourceonly  BOOLEAN</h1>
-				<pre><code>public boolean isNoBundle() {
-	return isTrue(getProperty(RESOURCEONLY)) || isTrue(getProperty(NOMANIFEST));
-}
+				<h1> Baselining</h1>
+				<p>Baselining compares a bundle with another bundle, the <em>baseline</em>, to find mistakes in the semantic versioning. For example, there is a binary incompatible change in the new bundle but the version has not been bumped Baselining can be run from the command line (see <code>bnd help baseline</code>) or it an be run as part of a project is build. </p>
 
-/**
- * @return
- */
-boolean isResourceOnly() {
-	return isTrue(getProperty(RESOURCEONLY));
-}
+<p>APIs are compared for backward compatibility using the semantic versioning rules defined in this chapter. Baselining is aware of the <code>@ConsumerType</code> and <code>@ProviderType</code> rules. Proper versions are calculated and suggested.</p>
+
+<h2 id="setting-up-a-project-for-baselining">Setting Up a Project for Baselining</h2>
+
+<p>During the build, bnd will check the <code>-baseline</code> instruction at the end of the build when the JAR is ready. This instruction is a selector on the symbolic name of the building bundle. If it matches, the baselining is started with one exception: the bundle version must be more than 1.0.0. If the version is less no baselining is possible, the purpose is to allow the primordial baseline to be established without errors.</p>
+
+<p>By default the baseline is a bundle from one of the repositories with the same symbolic name as the building bundle and the highest possible version. However, it is possible to specify the version or to baseline against a file, see <a href="/instructions/baseline.html">-baseline</a>.</p>
+
+<p>It is recommended to enable baselining per project since not all project requires baselining. For example, baselining is overkill for a project that is always compiled with all its dependencies and thus has no external dependencies. The recommended practice is therefore to add the following instruction to a project that requires baselining (usually API bundles):</p>
+
+<pre><code>-baseline: *
 </code></pre>
+
+<p>The default baseline is the bundle with the highest version in the <em>baseline repository</em>. The selector can specify a <code>version</code> or a <code>file</code> attribute when the default baseline is not applicable. </p>
+
+<ul>
+  <li><code>version</code> – Baseline against the first bundle in the baseline repository that has the given version or higher.</li>
+  <li><code>file</code> – The file is the baseline.</li>
+</ul>
+
+<p>The baseline bundle is looked up in the <em>baseline repository</em>. The baseline repository is by default the <em>release repository</em> unless overridden by the <a href="/instructions/baselinerepo.html">-baselinerepo</a> instruction. The release repository is set with the <a href="/instructions/releaserepo.html">-releaserepo</a> instruction.</p>
+
+<p>Only bundles that are not <em>staging</em> are considered for the baseline, this means that it is possible to release the current bundle and comapre against the previous version until the bundle is released and becomes master. </p>
+
+<p>By default the bundle and baseline are compared (<em>diffed</em>) and then analyzed for semantic version violations. Certain headers always change because they contain time or digest information. Most of these headers are already automatically ignored but the <a href="/instructions/diffignore.html">-diffignore</a> instruction can add more ignorance.</p>
+
+<h2 id="example-baselining-project-instructions">Example baselining Project Instructions</h2>
+
+<pre><code>  Bundle-Version: 1.0.2
+  -baseline: *
+  -baselinerepository: Released
+</code></pre>
+
+<p>In this example, the last version in the Released repository for the project’s bsn is supposed to be the previous version. Make sure you do not always release staging versions to this repository since this will create false changes. During a development cycle, the baseline version must remain constant until the current development bundle is released, at which points it becomes the baseline of the next cycle.</p>
+
+<p>Since an error is raised when the baselining detects a semantic version violation it is possible to release a snapshot in a build only when there is a correctly baselined bundle built.</p>
 
 
 			</div>

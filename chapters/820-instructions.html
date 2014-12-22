@@ -58,9 +58,11 @@
 		
 	
 		
+	
+		
 			<style>
 				 body {
-					counter-reset: h1 25;
+					counter-reset: h1 26;
 				}
 			</style>	
 		
@@ -146,6 +148,10 @@
   	
 		
 			<li><a href="/chapters/170-versioning.html">Versioning</a>
+	  	
+  	
+		
+			<li><a href="/chapters/180-baselining.html">Baselining</a>
 	  	
   	
 		
@@ -285,6 +291,7 @@ argument         ::= extended  | quoted-string
 parameter        ::= directive | attribute
 directive        ::= extended ':=' argument
 attribute        ::= extended '=' argument
+parameters       ::= parameter ( ',' parameter ) *
 unique-name      ::= identifier ( '.' identifier )*
 symbolic-name    ::= token('.'token)* 
 package-name     ::= unique-name
@@ -336,7 +343,7 @@ file-path        ::= &lt;file path, using / as separator&gt;
 
 <p>This will result in a buildpath of (when debug is not false) of: <code>com.example.foo;version=1.2, com.example.foo.debug;version=1.2</code>.</p>
 
-<h2 id="selectors">Selectors</h2>
+<h2 id="selector">SELECTOR</h2>
 
 <p>If a value in an instrucion has a <em>scope</em> then you will be able to use a <em>selector</em>. A scope is a well defined, finite, set. For example, if you use the ‘-exportcontents’ instruction you can specify the packages that can be exported. Since you can only export the packages that are inside your bundle, the scope is the set of package names that were collected so far.</p>
 
@@ -382,7 +389,7 @@ file-path        ::= &lt;file path, using / as separator&gt;
 
 <p>Selectors are used in virtually any place where there is a reasonable scope. It is a very powerful feature. However, it is also easy to go overboard. If you find you need to use this feature excessively then you are likely overdoing it.</p>
 
-<h2 id="files">Files</h2>
+<h2 id="file">FILE</h2>
 
 <p>One of the most painful thing in making bndlib run anywhere is handling of files. Even though Java has a decent abstraction of the file system, problems with spaces in file names and backslashes in the wrong place have caused an uneven amount of bugs. Ok, this partially because most bndlib developers tend to use Macs, still no excuse and quite embarrassing.</p>
 
@@ -407,14 +414,33 @@ file-path        ::= &lt;file path, using / as separator&gt;
   <li><code>${build} – The directory of the </code>cnf` directory.</li>
 </ul>
 
+<h2 id="path">PATH</h2>
+
+<p>A PATH is a <em>repository specification</em>. It is a specification for a number of JARs and/or bundles from a repository (well, most of the time). A PATH has the following syntax:</p>
+
+<pre><code>PATH              ::= target ( ',' target ) *
+target            ::= ( entry | FILE ';' 'version' '=' 'file' ) ( ';' PARAMETERS ) *
+entry             ::= symbolic-name ( ';' version ) ? 
+version	          ::= 'version' '=' ( RANGE | 'latest' | 'project' | 'snapshot' )
+</code></pre>
+
+<p>A PATH defines a number of bundles with its <em>entries</em>. Each entry is either a FILE or a symbolic-name. If only a symbolic name is specified, the default will be the import range from 0.0.0. This selects the whole repository for the given symbolic name. Outside the default, the repository entry can be specified in the following ways:</p>
+
+<ul>
+  <li>RANGE – A version range limits the entries selected from the active repositories.</li>
+  <li><code>latest</code> – </li>
+  <li><code>project</code> –</li>
+  <li><code>snapshot</code> –</li>
+</ul>
+
 <h2 id="reference">Reference</h2>
 
 <div>
 <dl class="property-index">
 
-<dt><a href="/instructions/baseline.html">-baseline symbolic (',' symbolic )*</a></dt><dd>Control what bundles are enabled for baselining</dd>
+<dt><a href="/instructions/baseline.html">-baseline selector</a></dt><dd>Control what bundles are enabled for baselining and optionally specify the baseline version or file.</dd>
 <dt><a href="/instructions/baselinerepo.html">-baselinerep qname</a></dt><dd>Define the repository to calculate baselining against</dd>
-<dt><a href="/instructions/buildpath.html">-buildpath REPO-SPEC ( ',' REPO-SPEC ) *</a></dt><dd>Provides the class path for building the jar. The entries are references to the repository.</dd>
+<dt><a href="/instructions/buildpath.html">-buildpath PATH</a></dt><dd>Provides the class path for building the jar, the entries are references to the repositories.</dd>
 <dt><a href="/instructions/bumpolicy.html">-bumppolicy</a></dt><dd>A mask to bump a version.</dd>
 <dt><a href="/instructions/cachedir.html">-cachedir</a></dt><dd></dd>
 <dt><a href="/instructions/check.html">-check 'ALL' | ( 'IMPORTS' | 'EXPORTS' ) *</a></dt><dd>Enable additional checking</dd>

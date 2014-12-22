@@ -71,6 +71,8 @@
 	
 		
 	
+		
+	
 
 </head>
 
@@ -140,6 +142,10 @@
   	
 		
 			<li><a href="/chapters/170-versioning.html">Versioning</a>
+	  	
+  	
+		
+			<li><a href="/chapters/180-baselining.html">Baselining</a>
 	  	
   	
 		
@@ -235,20 +241,12 @@
 			<div class=notes-margin>
 				<div style="float:right"><a href="">edit</a></div>
 				<h1> -baselinerep qname</h1>
-				<pre><code>private RepositoryPlugin getBaselineRepo() {
-	String repoName = getProperty(Constants.BASELINEREPO);
-	if (repoName == null)
-		return getReleaseRepo();
+				<p>The default repository for <a href="/chapters/180-baselining.html">baselining</a> is the <a href="/instructions/releaserepo.html">release repository</a>. However, this instruction can be set in the workspace to define an alternate repository. The reference <code>qname</code> is the name of the repository.</p>
 
-	List&lt;RepositoryPlugin&gt; repos = getPlugins(RepositoryPlugin.class);
-	for (RepositoryPlugin r : repos) {
-		if (r.getName().equals(repoName))
-			return r;
-	}
-	error("Could not find -baselinerepo %s", repoName);
-	return null;
-}
+<pre><code>-baselinerepo: Baseline
 </code></pre>
+
+<p>See <a href="/chapters/180-baselining.html">baselining</a> for more information.</p>
 
 			</div>
 	</ul>

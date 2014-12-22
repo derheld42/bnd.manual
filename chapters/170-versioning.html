@@ -77,6 +77,8 @@
 	
 		
 	
+		
+	
 
 </head>
 
@@ -146,6 +148,10 @@
   	
 		
 			<li class=selected>Versioning
+	  	
+  	
+		
+			<li><a href="/chapters/180-baselining.html">Baselining</a>
 	  	
   	
 		
@@ -243,7 +249,7 @@
 				<h1> Versioning</h1>
 				<p>Versioning is probably the most painful part of developing real software. Where toys and prototypes can be developed ignoring evolution, real software requires a migration path to an unknown future.</p>
 
-<p>The OSGi has defined a versioning policy that is described in the [Semantic Versioning whitepaper][http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf]. bnd fully supports this model and provides many shortcuts. The goal of bnd is remove any manual work from versioning bundles as well as packages.</p>
+<p>The OSGi has defined a versioning policy that is described in the <a href="http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf">Semantic Versioning whitepaper</a>. bnd fully supports this model and provides many shortcuts. The goal of bnd is remove any manual work from versioning bundles as well as packages.</p>
 
 <p>The key concept to version in OSGi is the ‘‘package’’. Bundles are an ‘‘aggregate’’ and therefore must move as fast as the fastest moving exported packages they contain. For example, if a bundle contains two exported packages <code>foo</code> and <code>bar</code> and <code>foo</code> is not changed but <code>bar</code> has a major change, then the bundle version needs to also have a major change. This requires an unnecessary update for a bundle that only depended on <code>foo</code>. Aggregating dependencies increases the fan out of the transitive dependencies. The result is that systems can only evolve when everything is updated simultaneously. The result is that the system as a whole becomes brittle.</p>
 
@@ -355,7 +361,7 @@ A library package is not an API that can be implemented by other bundles, it is 
 <p>-provider-policy :    ${range;[==,=+)}
   -consumer-policy :    ${range;[==,+)}</p>
 
-<p>The given values are the defaults. The value of the version policy will be used calculate the import based on the exported package. The [${range}][Macros#range] macro provides a convenient shortcut to do this using a version mask.</p>
+<p>The given values are the defaults. The value of the version policy will be used calculate the import based on the exported package. The ${range} macro provides a convenient shortcut to do this using a version mask.</p>
 
 <p>For example, a bundle that implements the OSGi Event Admin service can use the following bnd file:</p>
 
@@ -413,59 +419,6 @@ A library package is not an API that can be implemented by other bundles, it is 
 <h2 id="versioning-bundles">Versioning Bundles</h2>
 <p>Versioning bundles usually requires bumping the version every time it is placed in a repository. When package versioning is used, the bundle version is only important for tracking an artifact.</p>
 
-<p>! Baselining</p>
-
-<p>Requires 2.2.0</p>
-
-<p>Baselining compares the public API of a bundle with the public API of another bundle. It can be run from the command line (see <code>bnd help baseline</code>) or always after a project is build. For a project, the previous version of a bundle is found in the ‘‘baseline repository’’, this is called the ‘‘baseline’’.</p>
-
-<p>APIs are compared for backward compatibility using the semantic versioning rules defined in this chapter. Baselining is aware of the @ConsumerType and @ProviderType rules. Proper versions are calculated and suggested.</p>
-
-<p>It is possible to baseline a project with the following instructions:</p>
-
-<table>
-  <tbody>
-    <tr>
-      <td> </td>
-      <td><code>-baseline</code></td>
-      <td> </td>
-      <td>PARAMETERS</td>
-      <td> </td>
-      <td>The parameters specify glob patterns matched agains the bsns. The version attribute can indicate a version. A project  is only baselined if the name of the parameter matches and an appropriate version can be found in the baseline repo or the the release repo</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><code>-baselinerepo</code></td>
-      <td> </td>
-      <td>Repo name</td>
-      <td> </td>
-      <td>The repository that must be used for baselining</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><code>-releaserepo</code></td>
-      <td> </td>
-      <td>Repo name</td>
-      <td> </td>
-      <td>Repository to use when no <code>-baselinerepo</code> is specified.</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="example-baselining-project-instructions">Example baselining Project Instructions</h3>
-
-<pre><code>  Bundle-Version: 1.0.2
-  -baseline: *
-  -baselinerepository: Released
-</code></pre>
-
-<p>In this example, the last version in the Released repository for the project’s bsn is supposed to be the previous version. Make sure you do not always release snapshot versions to this repository since this will create false changes. During a development cycle, the baseline version must remain constant until the current development bundle is released, at which points it becomes the baseline of the next cycle.</p>
-
-<p>Since an error is raised when the baselining detects an semantic version violation it is possible to release a snapshot in a build only when there is a correctly baselined bundle built.</p>
-
 <h2 id="why-does-bnd-use-only-major-and-minor-version-component-in-import-package-headers">Why does bnd use only major and minor version component in import-package headers?</h2>
 
 <p>The micro is left out because it generates a lot of unnecessary releases, this is similar to the maven release process. If you connect everything 100%, you cannot move anything unless all its dependencies are moved at the same time. We actually tried in the OSGi build to use micro version changes for default methods in Java 8 but found that it just creates an enormous ripple through effect in the build. Not depending on the micro version is a lubricant that does not kill any bundle out there that depends on you.</p>
@@ -474,15 +427,15 @@ A library package is not an API that can be implemented by other bundles, it is 
 
 <p>That said, this is bnd so obviously you can override it. You can override the default version policy is:</p>
 
-<pre><code>-provider-policy = ${range;[==,=+)}
--consumer-policy = ${range;[==,+)}
+<pre><code>-provider-policy = ${range;\[==,=+)}
+-consumer-policy = ${range;\[==,+)}
 </code></pre>
 
 <p>Just set ‘===’ instead of ‘==’ for the floor version in your pom.xml in the <configuration> section and you should be ok.</configuration></p>
 
 <pre><code>&lt;configuration&gt;
-	&lt;_provider-policy&gt;${range;[===,=+)}&lt;/_provider-policy&gt;
-	&lt;_consumer-policy&gt;${range;[===,+)}&lt;/_consumer-policy&gt;
+	&lt;_provider-policy&gt;${range;\[===,=+)}&lt;/_provider-policy&gt;
+	&lt;_consumer-policy&gt;${range;\[===,+)}&lt;/_consumer-policy&gt;
 &lt;/configuration&gt;
 </code></pre>
 
